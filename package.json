@@ -1,7 +1,7 @@
 {
-  "name": "slack_jokebot",
+  "name": "Enkora Bot",
   "version": "1.0.0",
-  "description": "Slackbot that tells random jokes",
+  "description": "A Slackbot to help to run some backup process",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
