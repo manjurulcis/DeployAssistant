@@ -1,14 +1,6 @@
-# @Jokebot
+# @EnkoraBot
 
-> Simple slackbot built with Node.js and Slackbots.js that tells random Chuck Norris and Yo Mama jokes.
-
-## APIs Used:
-[http://www.icndb.com/api/](http://www.icndb.com/api/)
-
-[http://yomomma.info/](http://yomomma.info/)
-
-## Slackbots (slack-bot-api)
-[https://github.com/mishk0/slack-bot-api](https://github.com/mishk0/slack-bot-api)
+> Simple slackbot built with Node.js and Slackbots.js that help to run server command to extract some backup or perform some other tasks..
 
 ## Quick Start
 
@@ -22,12 +14,7 @@ npm start
 # Create bot in Slack and generate and include your OAuth bot token
 ```
 
-## App Info
 
-### Author
-
-Brad Traversy
-[Traversy Media](http://www.traversymedia.com)
 
 ### Version
 
