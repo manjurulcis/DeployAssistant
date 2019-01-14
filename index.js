@@ -10,6 +10,9 @@ const bot = new SlackBot({
   name: 'backupextractor'
 });
 
+const allowedUsers = [];
+const allowedChannels = [];
+
 // Start Handler
 bot.on('start', () => {
   const params = {
@@ -39,6 +42,7 @@ bot.on('message', data => {
 
 // Respons to Data
 function handleMessage(message) {
+  // here it is possible to extract the message and put some validity check and then direct to appropriate block of code
   if (message.includes(' tapanila')) {
     runBackupCommand();
   }
@@ -50,7 +54,9 @@ function runBackupCommand() {
     icon_emoji: ':working:'
   };
 
-  execute('ls', function(stdout){
+  let command = "ls"; // Show Directory Listing
+
+  execute(command, function(stdout){
     let outResponse = `Backup Process Started\n` +  stdout;
     bot.postMessageToChannel('backup', outResponse, params);
   })
