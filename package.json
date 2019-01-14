@@ -1,5 +1,5 @@
 {
-  "name": "Enkora Bot",
+  "name": "EnkoraBot",
   "version": "1.0.0",
   "description": "A Slackbot to help to run some backup process",
   "main": "index.js",
