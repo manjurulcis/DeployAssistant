@@ -6,7 +6,7 @@ function execute(command, callback){
 };
 
 const bot = new SlackBot({
-  token: 'xoxb-522613001123-522718151106-GDAr1SIe8fiFrkxv6MmV78Ge',
+  token: '',
   name: 'backupextractor'
 });
 
@@ -18,7 +18,7 @@ bot.on('start', () => {
 
   bot.postMessageToChannel(
     'backup',
-    'Welcome to Backup Extractor Bot. I can help tp extract a database backup',
+    'Welcome to Backup Extractor Bot. I can help tp extract a database backup. Type "setupname DATE" for get database extract',
     params
   );
 });
@@ -41,8 +41,6 @@ bot.on('message', data => {
 function handleMessage(message) {
   if (message.includes(' tapanila')) {
     runBackupCommand();
-  } else if (message.includes(' help')) {
-    runHelp();
   }
 }
 
@@ -52,9 +50,9 @@ function runBackupCommand() {
     icon_emoji: ':working:'
   };
 
-  bot.postMessageToChannel('backup', `Backup Process Started`, params);
   execute('ls', function(stdout){
-    bot.postMessageToChannel('backup', stdout, params);
+    let outResponse = `Backup Process Started\n` +  stdout;
+    bot.postMessageToChannel('backup', outResponse, params);
   })
 }
 
