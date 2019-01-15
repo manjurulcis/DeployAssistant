@@ -10,8 +10,9 @@ const bot = new SlackBot({
   name: 'backupextractor'
 });
 
-const allowedUsers = [];
-const allowedChannels = [];
+const allowedUsers = ['UFBUU7SBS'];
+const allowedChannels = ['CFE3MD0G6'];
+const currentUsedChannel = 'backup';
 
 // Start Handler
 bot.on('start', () => {
@@ -31,11 +32,30 @@ bot.on('error', err => console.log(err));
 
 // Message Handler
 bot.on('message', data => {
+  console.log(data);
   if (data.type !== 'message') {
     return;
   }
 
-  console.log(data);
+  if(data.username && data.username == "backupextractor") {
+    return;
+  }
+
+  let user = data.user;
+  let channel = data.channel;
+  console.log(user, channel);
+
+  //Filter out the not allowed user
+  if (!allowedUsers.includes(user)) {
+    invalidUserError();
+    return;
+  }
+
+    //Filter out the not allowed channels
+  if (!allowedChannels.includes(channel)) {
+      invalidChannelError();
+      return;
+  }
 
   handleMessage(data.text);
 });
@@ -58,8 +78,29 @@ function runBackupCommand() {
 
   execute(command, function(stdout){
     let outResponse = `Backup Process Started\n` +  stdout;
-    bot.postMessageToChannel('backup', outResponse, params);
+    bot.postMessageToChannel(currentUsedChannel, outResponse, params);
   })
+}
+
+
+// Invalid user error message
+function invalidUserError() {
+    const params = {
+        icon_emoji: ':error:'
+    };
+
+    let outResponse = `Permission denied. You are not allowed to perform this action\n` ;
+    bot.postMessageToChannel(currentUsedChannel, outResponse, params);
+}
+
+// Invalid user error message
+function invalidChannelError() {
+    const params = {
+        icon_emoji: ':error:'
+    };
+
+    let outResponse = `Permission denied. This channel is not allowed to perform this action\n` ;
+    bot.postMessageToChannel(currentUsedChannel, outResponse, params);
 }
 
 
@@ -70,9 +111,5 @@ function runHelp() {
     icon_emoji: ':question:'
   };
 
-  bot.postMessageToChannel(
-    'backup',
-    `Type @backupextractor with either 'tapanila DATE' to extract database backup`,
-    params
-  );
+  bot.postMessageToChannel(currentUsedChannel, `Type @backupextractor with either 'tapanila DATE' to extract database backup`, params);
 }
