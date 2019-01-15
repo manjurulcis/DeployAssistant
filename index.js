@@ -12,7 +12,7 @@ const bot = new SlackBot({
 
 const allowedUsers = ['UFBUU7SBS'];
 const allowedChannels = ['CFE3MD0G6'];
-const currentUsedChannel = 'backup';
+const currentUsedChannel = 'database-backup';
 
 // Start Handler
 bot.on('start', () => {
@@ -21,7 +21,7 @@ bot.on('start', () => {
   };
 
   bot.postMessageToChannel(
-    'backup',
+    currentUsedChannel,
     'Welcome to Backup Extractor Bot. I can help tp extract a database backup. Type "setupname DATE" for get database extract',
     params
   );
@@ -43,7 +43,6 @@ bot.on('message', data => {
 
   let user = data.user;
   let channel = data.channel;
-  console.log(user, channel);
 
   //Filter out the not allowed user
   if (!allowedUsers.includes(user)) {
