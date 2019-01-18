@@ -15,7 +15,7 @@ npm install
 npm start
 
 # On Slack.com
-1. Create a Slack App
+1. Create a Slack App and install it in workspace
 2. Create A bot User and remmeber to update it in index.js line 4
 3. Create a channel e.g. 'database-backup' and update it in index.js line 7
 4. Get OAuth token and update token in the following line in index.js line 12
