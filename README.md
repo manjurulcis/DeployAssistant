@@ -11,7 +11,14 @@ npm install
 # Serve on localhost:3000
 npm start
 
-# Create bot in Slack and generate and include your OAuth bot token
+# On Slack.com
+1. Create a Slack App
+2. Create A bot User
+3. Get OAuth token and put token in 
+const bot = new SlackBot({
+                            token: '',
+                            name: 'backupextractor'
+                         });
 ```
 
 
