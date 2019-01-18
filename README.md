@@ -1,6 +1,9 @@
 # @EnkoraBot
 
-> Simple slackbot built with Node.js and Slackbots.js that help to run server command to extract some backup or perform some other tasks..
+> Simple slackbot built with Node.js and Slackbots.js that help to run server command to extract some backup 
+or perform some other tasks..
+
+> Possible to run this program in local machine and test the app/bot functionality from slack app
 
 ## Quick Start
 
@@ -13,12 +16,9 @@ npm start
 
 # On Slack.com
 1. Create a Slack App
-2. Create A bot User
-3. Get OAuth token and put token in 
-const bot = new SlackBot({
-                            token: '',
-                            name: 'backupextractor'
-                         });
+2. Create A bot User and remmeber to update it in index.js line 4
+3. Create a channel e.g. 'database-backup' and update it in index.js line 7
+4. Get OAuth token and update token in the following line in index.js line 12
 ```
 
 
