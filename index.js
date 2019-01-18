@@ -10,9 +10,12 @@ const bot = new SlackBot({
   name: 'backupextractor'
 });
 
+const botUsername = "backupextractor";
 const allowedUsers = ['UFBUU7SBS'];
 const allowedChannels = ['CFE3MD0G6'];
 const currentUsedChannel = 'database-backup';
+const usernameValidation = false;
+const channelValidation = false;
 
 // Start Handler
 bot.on('start', () => {
@@ -37,24 +40,24 @@ bot.on('message', data => {
     return;
   }
 
-  if(data.username && data.username == "backupextractor") {
+  if(data.username && data.username == botUsername) {
     return;
   }
 
   let user = data.user;
   let channel = data.channel;
 
-  //Filter out the not allowed user
-  if (!allowedUsers.includes(user)) {
-    invalidUserError();
-    return;
-  }
+    //Filter out the not allowed user
+    if (usernameValidation && !allowedUsers.includes(user)) {
+        invalidUserError();
+        return;
+    }
 
     //Filter out the not allowed channels
-  if (!allowedChannels.includes(channel)) {
-      invalidChannelError();
-      return;
-  }
+    if (channelValidation && !allowedChannels.includes(channel)) {
+        invalidChannelError();
+        return;
+    }
 
   handleMessage(data.text);
 });
