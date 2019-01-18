@@ -1,16 +1,17 @@
 const SlackBot = require('slackbots');
 const exec = require('child_process').exec;
-const botUsername = "backupextractor";
-const allowedUsers = ['UFBUU7SBS'];
-const allowedChannels = ['CFE3MD0G6'];
-const currentUsedChannel = 'database-backup';
-const usernameValidation = false;
-const channelValidation = false;
+
+const botUsername = "backupextractor"; // Get this from slack.com by creating an app and bot user
+const allowedUsers = ['UFBUU7SBS']; // On app load and on message it is possible find out the user ids and restrict who can use this bot
+const allowedChannels = ['CFE3MD0G6']; // Same as user
+const currentUsedChannel = 'database-backup'; // Channel name from where the app or bot will post message or response
+const usernameValidation = false; // Username validation  false = turned off
+const channelValidation = false;  // Channel validation  false = turned off
 
 
 const bot = new SlackBot({
-  token: '',
-  name: botUsername
+    token: '',
+    name: botUsername
 });
 
 
@@ -18,15 +19,15 @@ const bot = new SlackBot({
  * Start handler
  */
 bot.on('start', () => {
-  const params = {
-    icon_emoji: ':smiley:'
-  };
+    const params = {
+        icon_emoji: ':smiley:'
+    };
 
-  bot.postMessageToChannel(
-    currentUsedChannel,
-    'Welcome to Backup Extractor Bot. I can help tp extract a database backup. Type "setupname DATE" for get database extract',
-    params
-  );
+    bot.postMessageToChannel(
+        currentUsedChannel,
+        'Welcome to Backup Extractor Bot. I can help tp extract a database backup. Type "setupname DATE" for get database extract',
+        params
+    );
 });
 
 /**
@@ -38,17 +39,17 @@ bot.on('error', err => console.log(err));
  * Message handler
  */
 bot.on('message', data => {
-  console.log(data);
-  if (data.type !== 'message') {
-    return;
-  }
+    console.log(data);
+    if (data.type !== 'message') {
+        return;
+    }
 
-  if(data.username && data.username == botUsername) {
-    return;
-  }
+    if (data.username && data.username == botUsername) {
+        return;
+    }
 
-  let user = data.user;
-  let channel = data.channel;
+    let user = data.user;
+    let channel = data.channel;
 
     //Filter out the not allowed user
     if (usernameValidation && !allowedUsers.includes(user)) {
@@ -62,7 +63,7 @@ bot.on('message', data => {
         return;
     }
 
-  handleMessage(data.text);
+    handleMessage(data.text);
 });
 
 /**
@@ -70,26 +71,26 @@ bot.on('message', data => {
  * @param message
  */
 function handleMessage(message) {
-  // here it is possible to extract the message and put some validity check and then direct to appropriate block of code
-  if (message.includes(' tapanila')) {
-    runBackupCommand();
-  }
+    // here it is possible to extract the message and put some validity check and then direct to appropriate block of code
+    if (message.includes(' tapanila')) {
+        runBackupCommand();
+    }
 }
 
 /**
  * Run backup command
  */
 function runBackupCommand() {
-  const params = {
-    icon_emoji: ':working:'
-  };
+    const params = {
+        icon_emoji: ':working:'
+    };
 
-  let command = "ls"; // Show Directory Listing
+    let command = "ls"; // Show Directory Listing
 
-  execute(command, function(stdout){
-    let outResponse = `Backup Process Started\n` +  stdout;
-    bot.postMessageToChannel(currentUsedChannel, outResponse, params);
-  })
+    execute(command, function (stdout) {
+        let outResponse = `Backup Process Started\n` + stdout;
+        bot.postMessageToChannel(currentUsedChannel, outResponse, params);
+    })
 }
 
 
@@ -101,7 +102,7 @@ function invalidUserError() {
         icon_emoji: ':error:'
     };
 
-    let outResponse = `Permission denied. You are not allowed to perform this action\n` ;
+    let outResponse = `Permission denied. You are not allowed to perform this action\n`;
     bot.postMessageToChannel(currentUsedChannel, outResponse, params);
 }
 
@@ -113,7 +114,7 @@ function invalidChannelError() {
         icon_emoji: ':error:'
     };
 
-    let outResponse = `Permission denied. This channel is not allowed to perform this action\n` ;
+    let outResponse = `Permission denied. This channel is not allowed to perform this action\n`;
     bot.postMessageToChannel(currentUsedChannel, outResponse, params);
 }
 
@@ -122,11 +123,11 @@ function invalidChannelError() {
  * Show help text
  */
 function runHelp() {
-  const params = {
-    icon_emoji: ':question:'
-  };
+    const params = {
+        icon_emoji: ':question:'
+    };
 
-  bot.postMessageToChannel(currentUsedChannel, `Type @backupextractor with either 'tapanila DATE' to extract database backup`, params);
+    bot.postMessageToChannel(currentUsedChannel, `Type @backupextractor with either 'tapanila DATE' to extract database backup`, params);
 }
 
 /**
@@ -134,6 +135,8 @@ function runHelp() {
  * @param command
  * @param callback
  */
-function execute(command, callback){
-    exec(command, function(error, stdout, stderr){ callback(stdout); });
+function execute(command, callback) {
+    exec(command, function (error, stdout, stderr) {
+        callback(stdout);
+    });
 };
