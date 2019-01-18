@@ -1,15 +1,5 @@
 const SlackBot = require('slackbots');
-const axios = require('axios');
-var exec = require('child_process').exec;
-function execute(command, callback){
-    exec(command, function(error, stdout, stderr){ callback(stdout); });
-};
-
-const bot = new SlackBot({
-  token: '',
-  name: 'backupextractor'
-});
-
+const exec = require('child_process').exec;
 const botUsername = "backupextractor";
 const allowedUsers = ['UFBUU7SBS'];
 const allowedChannels = ['CFE3MD0G6'];
@@ -17,7 +7,16 @@ const currentUsedChannel = 'database-backup';
 const usernameValidation = false;
 const channelValidation = false;
 
-// Start Handler
+
+const bot = new SlackBot({
+  token: '',
+  name: botUsername
+});
+
+
+/**
+ * Start handler
+ */
 bot.on('start', () => {
   const params = {
     icon_emoji: ':smiley:'
@@ -30,10 +29,14 @@ bot.on('start', () => {
   );
 });
 
-// Error Handler
+/**
+ * Error handler
+ */
 bot.on('error', err => console.log(err));
 
-// Message Handler
+/**
+ * Message handler
+ */
 bot.on('message', data => {
   console.log(data);
   if (data.type !== 'message') {
@@ -62,7 +65,10 @@ bot.on('message', data => {
   handleMessage(data.text);
 });
 
-// Respons to Data
+/**
+ * Handle the user message for running command associated with it
+ * @param message
+ */
 function handleMessage(message) {
   // here it is possible to extract the message and put some validity check and then direct to appropriate block of code
   if (message.includes(' tapanila')) {
@@ -70,7 +76,9 @@ function handleMessage(message) {
   }
 }
 
-// Tell a Chuck Norris Joke
+/**
+ * Run backup command
+ */
 function runBackupCommand() {
   const params = {
     icon_emoji: ':working:'
@@ -85,7 +93,9 @@ function runBackupCommand() {
 }
 
 
-// Invalid user error message
+/**
+ * Validation for specific slack users to run command
+ */
 function invalidUserError() {
     const params = {
         icon_emoji: ':error:'
@@ -95,7 +105,9 @@ function invalidUserError() {
     bot.postMessageToChannel(currentUsedChannel, outResponse, params);
 }
 
-// Invalid user error message
+/**
+ * Validation for specific channels to use for this app
+ */
 function invalidChannelError() {
     const params = {
         icon_emoji: ':error:'
@@ -106,8 +118,9 @@ function invalidChannelError() {
 }
 
 
-
-// Show Help Text
+/**
+ * Show help text
+ */
 function runHelp() {
   const params = {
     icon_emoji: ':question:'
@@ -115,3 +128,12 @@ function runHelp() {
 
   bot.postMessageToChannel(currentUsedChannel, `Type @backupextractor with either 'tapanila DATE' to extract database backup`, params);
 }
+
+/**
+ * Custom Function to execute command in child node process
+ * @param command
+ * @param callback
+ */
+function execute(command, callback){
+    exec(command, function(error, stdout, stderr){ callback(stdout); });
+};
