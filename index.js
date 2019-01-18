@@ -1,30 +1,34 @@
 const SlackBot = require('slackbots');
 const axios = require('axios');
 var exec = require('child_process').exec;
-function execute(command, callback){
-    exec(command, function(error, stdout, stderr){ callback(stdout); });
+
+function execute(command, callback) {
+    exec(command, function (error, stdout, stderr) {
+        callback(stdout);
+    });
 };
 
 const bot = new SlackBot({
-  token: '',
-  name: 'backupextractor'
+    token: 'xoxb-522613001123-522718151106-I6SbKga0JffrkupAY3BvdK52',
+    name: 'backupextractor'
 });
 
 const allowedUsers = ['UFBUU7SBS'];
-const allowedChannels = ['CFE3MD0G6'];
+const allowedChannels = ['CFE3MD0G6', 'CFEV8QJET'];
 const currentUsedChannel = 'database-backup';
-
+const usernameValidation = false;
+const channelValidation = false;
 // Start Handler
 bot.on('start', () => {
-  const params = {
-    icon_emoji: ':smiley:'
-  };
+    const params = {
+        icon_emoji: ':smiley:'
+    };
 
-  bot.postMessageToChannel(
-    currentUsedChannel,
-    'Welcome to Backup Extractor Bot. I can help tp extract a database backup. Type "setupname DATE" for get database extract',
-    params
-  );
+    bot.postMessageToChannel(
+        currentUsedChannel,
+        'Welcome to Backup Extractor Bot. I can help tp extract a database backup. Type "setupname DATE" for get database extract',
+        params
+    );
 });
 
 // Error Handler
@@ -32,53 +36,54 @@ bot.on('error', err => console.log(err));
 
 // Message Handler
 bot.on('message', data => {
-  console.log(data);
-  if (data.type !== 'message') {
-    return;
-  }
+    //console.log(data);
+    if (data.type !== 'message') {
+        return;
+    }
 
-  if(data.username && data.username == "backupextractor") {
-    return;
-  }
+    if (data.username && data.username == "backupextractor") {
+        return;
+    }
 
-  let user = data.user;
-  let channel = data.channel;
+    console.log(data);
+    let user = data.user;
+    let channel = data.channel;
 
-  //Filter out the not allowed user
-  if (!allowedUsers.includes(user)) {
-    invalidUserError();
-    return;
-  }
+    //Filter out the not allowed user
+    if (usernameValidation && !allowedUsers.includes(user)) {
+        invalidUserError();
+        return;
+    }
 
     //Filter out the not allowed channels
-  if (!allowedChannels.includes(channel)) {
-      invalidChannelError();
-      return;
-  }
+    if (channelValidation && !allowedChannels.includes(channel)) {
+        invalidChannelError();
+        return;
+    }
 
-  handleMessage(data.text);
+    handleMessage(data.text);
 });
 
 // Respons to Data
 function handleMessage(message) {
-  // here it is possible to extract the message and put some validity check and then direct to appropriate block of code
-  if (message.includes(' tapanila')) {
-    runBackupCommand();
-  }
+    // here it is possible to extract the message and put some validity check and then direct to appropriate block of code
+    if (message.includes(' tapanila')) {
+        runBackupCommand();
+    }
 }
 
 // Tell a Chuck Norris Joke
 function runBackupCommand() {
-  const params = {
-    icon_emoji: ':working:'
-  };
+    const params = {
+        icon_emoji: ':working:'
+    };
 
-  let command = "ls"; // Show Directory Listing
+    let command = "ls"; // Show Directory Listing
 
-  execute(command, function(stdout){
-    let outResponse = `Backup Process Started\n` +  stdout;
-    bot.postMessageToChannel(currentUsedChannel, outResponse, params);
-  })
+    execute(command, function (stdout) {
+        let outResponse = `Backup Process Started\n` + stdout;
+        bot.postMessageToChannel(currentUsedChannel, outResponse, params);
+    })
 }
 
 
@@ -88,7 +93,7 @@ function invalidUserError() {
         icon_emoji: ':error:'
     };
 
-    let outResponse = `Permission denied. You are not allowed to perform this action\n` ;
+    let outResponse = `Permission denied. You are not allowed to perform this action\n`;
     bot.postMessageToChannel(currentUsedChannel, outResponse, params);
 }
 
@@ -98,17 +103,16 @@ function invalidChannelError() {
         icon_emoji: ':error:'
     };
 
-    let outResponse = `Permission denied. This channel is not allowed to perform this action\n` ;
+    let outResponse = `Permission denied. This channel is not allowed to perform this action\n`;
     bot.postMessageToChannel(currentUsedChannel, outResponse, params);
 }
 
 
-
 // Show Help Text
 function runHelp() {
-  const params = {
-    icon_emoji: ':question:'
-  };
+    const params = {
+        icon_emoji: ':question:'
+    };
 
-  bot.postMessageToChannel(currentUsedChannel, `Type @backupextractor with either 'tapanila DATE' to extract database backup`, params);
+    bot.postMessageToChannel(currentUsedChannel, `Type @backupextractor with either 'tapanila DATE' to extract database backup`, params);
 }
